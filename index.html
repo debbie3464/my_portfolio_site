@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Deborah Bhuyan's portfolio: CSE student into data and frontend.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
     <link rel="stylesheet" href="style.css">
     <title>Deborah Bhuyan | Portfolio</title>
 </head>
@@ -31,10 +32,8 @@
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
-                        print("hello world")<br>
+                        print("hello world !!")<br>
                         print("welcome to my portfolio :D")<br>
-                        print("built with HTML, CSS and JavaScript")<br>
-                        print("kernel is ready to run")
                     </code>
                     <button class="run">▶ Run</button>
                 </div>
@@ -51,7 +50,7 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>about.info()</code>
+                    <code>Deborah.info()</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
@@ -67,13 +66,16 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>skills.head()</code>
+                    <code>plt.pie(skills)</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
                     <div class="tags">
                         <span>Python</span><span>pandas</span><span>SQL</span>
                         <span>HTML/CSS</span><span>JavaScript</span><span>Git</span>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="skills-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -90,7 +92,13 @@
                     <div class="table-wrap">
                         <table class="df">
                             <thead>
-                                <tr><th></th><th>project</th><th>tech</th><th>description</th><th>link</th></tr>
+                                <tr>
+                                    <th></th>
+                                    <th>project</th>
+                                    <th>tech</th>
+                                    <th>description</th>
+                                    <th>link</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -98,7 +106,8 @@
                                     <td>Spotify Analysis</td>
                                     <td>Python, pandas, seaborn</td>
                                     <td>Analysis of my own Spotify listening data</td>
-                                    <td><a href="https://github.com/debbie3464/spotify-listening-analysis" target="_blank">GitHub</a></td>
+                                    <td><a href="https://github.com/debbie3464/spotify-listening-analysis"
+                                            target="_blank">GitHub</a></td>
                                 </tr>
                                 <tr>
                                     <th>1</th>
@@ -138,11 +147,33 @@
 
         <footer># end of notebook</footer>
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         let count = 0;
         const status = document.getElementById("kernel-status");
         const dot = document.querySelector(".dot");
+        let skillsChart = null;
+        function drawSkillsChart() {
+            if (skillsChart) return;
+            skillsChart = new Chart(document.getElementById("skills-chart"), {
+                type: "pie",
+                data: {
+                    labels: ["Python", "Data analysis", "Web", "SQL", "Git"],
+                    datasets: [{
+                        data: [50, 20, 15, 10, 5],
+                        backgroundColor: ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b3"],
+                        borderColor: "#ffffff",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: { display: true, text: "Where my time goes (%)" },
+                        legend: { position: "right" }
+                    }
+                }
+            });
+        }
 
         function runCell(cell) {
             return new Promise(resolve => {
@@ -162,6 +193,7 @@
                     }
                     outLabel.textContent = `Out[${count}]:`;
                     out.classList.remove("hidden");
+                    if (out.querySelector("#skills-chart")) drawSkillsChart();
 
                     status.textContent = "Python 3 | Idle";
                     dot.classList.remove("busy");

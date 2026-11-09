@@ -67,7 +67,7 @@ section { padding: 10px 30px; }
     display: flex; align-items: flex-start; gap: 12px;
     font-family: Consolas, "Courier New", monospace;
     font-size: 15px;
-    color: rgb(255, 0, 0);
+    color: rgba(2, 2, 2, 0.429);
 }
 .label {
     min-width: 60px;
