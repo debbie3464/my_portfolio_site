@@ -106,9 +106,9 @@ section {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 15px;
-    color: rgb(255, 0, 0);
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 14px;
+    color: rgba(60, 60, 60, 0.7); /* transparent grey */
 }
 
 .label {
@@ -116,7 +116,7 @@ section {
     padding-top: 10px;
     text-align: right;
     color: var(--muted);
-    font-family: Consolas, "Courier New", monospace;
+    font-family: "JetBrains Mono", Consolas, monospace;
 }
 
 code {
@@ -128,6 +128,14 @@ code {
     padding: 10px 90px 10px 12px;
 }
 
+.output {
+    position: relative;
+    padding: 12px 12px 12px 72px;
+    font-family: "Pixelify Sans", "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+    color: #000;
+}
 /* run buttons */
 .run,
 #run-all {
@@ -152,13 +160,6 @@ code {
     background: #eee;
 }
 
-/* output */
-.output {
-    position: relative;
-    padding: 12px 12px 12px 72px;
-    font-family: "Pixelify Sans", "Segoe UI", Arial, sans-serif;
-    font-size: 15px;
-}
 
 .out-label {
     position: absolute;

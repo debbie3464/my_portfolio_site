@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Pixelify+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
     <title>Deborah Bhuyan Portfolio</title>
 </head>
 
@@ -20,13 +22,13 @@
             <span class="logo">Deborah's_portfolio.ipynb</span>
 
             <ul>
+                <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#Certifications">Certifications</a></li>
-                <li><a href="#Contact">Contact</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-
             <button id="run-all">▶▶ Run All</button>
             <span class="kernel"><span class="dot"></span> <span id="kernel-status">Python 3 | Idle</span></span>
         </nav>
@@ -70,14 +72,24 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>Deborah.info()</code>
+                    <code>
+                me = Deborah()<br>
+                me.info()<br>
+                me.plot_strengths()
+            </code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    Name: Deborah Bhuyan<br>
-                    Education: B.Tech CSE (AI &amp; Data Science), 2nd year<br>
-                    Interests: data analysis, Python, frontend<br>
-                    Looking for: first internship in Python / data analysis
+                    Name: Deborah Lalawmpuii Bhuyan<br>
+                    University: Amity University Kolkata<br>
+                    Currently studying: B.Tech CSE (AI &amp; Data Science)<br>
+                    <br>
+                    I enjoy the side of coding that gives me creative control, lets me build things from scratch, and
+                    turns raw data into something people can actually see and understand. I'm looking for an internship
+                    where I can keep learning by building real things.
+                    <div class="chart-box">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
@@ -86,7 +98,11 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>plt.pie(skills)</code>
+                    <code>
+                skills = {"Python": 40, "pandas": 20, "SQL": 15, "HTML/CSS/JS": 15, "Git": 10}<br>
+                plt.pie(skills.values(), labels=skills.keys())<br>
+                plt.show()
+            </code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
@@ -99,6 +115,17 @@
                     </div>
                 </div>
             </div>
+        </section>
+        <div class="output hidden">
+            <div class="tags">
+                <span>Python</span><span>pandas</span><span>SQL</span>
+                <span>HTML/CSS</span><span>JavaScript</span><span>Git</span>
+            </div>
+            <div class="chart-box">
+                <canvas id="skills-chart"></canvas>
+            </div>
+        </div>
+        </div>
         </section>
 
         <section id="projects">
@@ -169,7 +196,9 @@
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    <p>nth here yet<p>                </div>
+                    <p>nth here yet
+                    <p>
+                </div>
             </div>
         </section>
 
@@ -192,6 +221,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <script>
         let count = 0;
         const status = document.getElementById("kernel-status");
@@ -200,12 +230,13 @@
         let skillsChart = null;
         function drawSkillsChart() {
             if (skillsChart) return;
+
             skillsChart = new Chart(document.getElementById("skills-chart"), {
                 type: "pie",
                 data: {
-                    labels: ["Python", "Data analysis", "Web", "SQL", "Git"],
+                    labels: ["Python", "pandas", "SQL", "HTML/CSS/JS", "Git"],
                     datasets: [{
-                        data: [50, 20, 15, 10, 5],
+                        data: [40, 20, 15, 15, 10],
                         backgroundColor: ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b3"],
                         borderColor: "#ffffff",
                         borderWidth: 2
@@ -213,13 +244,56 @@
                 },
                 options: {
                     plugins: {
-                        title: { display: true, text: "Pie chart of my skill-sets" },
-                        legend: { position: "right" }
+                        title: { display: true, text: "Where my coding time goes" },
+                        legend: { position: "right" },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%`
+                            }
+                        }
                     }
                 }
             });
         }
+        let radarChart = null;
+function drawRadarChart() {
+    if (radarChart) return;
 
+    radarChart = new Chart(document.getElementById("radar-chart"), {
+        type: "radar",
+        data: {
+            labels: [
+                "Creative problem-solving",
+                "Learning speed",
+                "Attention to detail",
+                "Data thinking",
+                "Frontend polish",
+                "Debugging patience"
+            ],
+            datasets: [{
+                label: "self-assessed",
+                data: [9, 8, 7, 7, 6, 5],
+                backgroundColor: "rgba(76, 114, 176, 0.25)",
+                borderColor: "#4c72b0",
+                pointBackgroundColor: "#4c72b0",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                title: { display: true, text: "How I work (self-assessed)" },
+                legend: { display: false }
+            },
+            scales: {
+                r: {
+                    min: 0,
+                    max: 10,
+                    ticks: { stepSize: 2, backdropColor: "transparent" }
+                }
+            }
+        }
+    });
+}
         let importsDone = false;
         async function playImports(out) {
             if (importsDone) return;
@@ -241,7 +315,7 @@
             return new Promise(resolve => {
                 status.textContent = "Python 3 | Busy";
                 dot.classList.add("busy");
-
+  
                 setTimeout(async () => {
                     count++;
                     cell.querySelector(".label").textContent = `In [${count}]:`;
@@ -256,6 +330,7 @@
                     outLabel.textContent = `Out[${count}]:`;
                     out.classList.remove("hidden");
                     if (out.querySelector("#skills-chart")) drawSkillsChart();
+                    if (out.querySelector("#radar-chart")) drawRadarChart();
                     if (out.querySelector(".import-lines")) await playImports(out);
 
                     status.textContent = "Python 3 | Idle";
