@@ -8,6 +8,9 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
     <title>Deborah Bhuyan | Portfolio</title>
 </head>
 
@@ -33,15 +36,31 @@
                     <span class="label">In [ ]:</span>
                     <code>
                         print("hello world !!")<br>
-                        print("welcome to my portfolio :D")<br>
+                        print("welcome to my portfolio :D")
                     </code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    hello world<br>
-                    welcome to my portfolio :D<br>
-                    built with HTML, CSS and JavaScript<br>
-                    kernel is ready to run
+                    hello world !!<br>
+                    welcome to my portfolio :D
+                </div>
+            </div>
+
+            <div class="cell">
+                <div class="code">
+                    <span class="label">In [ ]:</span>
+                    <code>
+                        import html<br>
+                        import css<br>
+                        import js<br>
+                        import chart<br>
+                        import portfolio<br>
+                        print("this website was made using HTML, CSS, JavaScript and Chart.js")
+                    </code>
+                    <button class="run">▶ Run</button>
+                </div>
+                <div class="output hidden">
+                    <div class="import-lines"></div>
                 </div>
             </div>
         </section>
@@ -85,7 +104,18 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>projects_df</code>
+                    <code>
+                        import pandas as pd<br>
+                        <br>
+                        projects_df = pd.DataFrame({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"project": ["Spotify Analysis", "Snake Game", "When It Rains"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"tech": ["Python, pandas, seaborn", "Python, pygame", "Python, pygame"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"description": ["Analysis of my own Spotify listening data", "Classic snake game", "A cat dodges falling raindrops"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"link": ["GitHub", "GitHub", "GitHub"]<br>
+                        })<br>
+                        <br>
+                        projects_df
+                    </code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
@@ -147,11 +177,13 @@
 
         <footer># end of notebook</footer>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         let count = 0;
         const status = document.getElementById("kernel-status");
         const dot = document.querySelector(".dot");
+
         let skillsChart = null;
         function drawSkillsChart() {
             if (skillsChart) return;
@@ -168,11 +200,28 @@
                 },
                 options: {
                     plugins: {
-                        title: { display: true, text: "Where my time goes (%)" },
+                        title: { display: true, text: "Pie chart of my skill-sets" },
                         legend: { position: "right" }
                     }
                 }
             });
+        }
+
+        let importsDone = false;
+        async function playImports(out) {
+            if (importsDone) return;
+            importsDone = true;
+            const box = out.querySelector(".import-lines");
+            for (const name of ["html", "css", "js", "chart", "portfolio"]) {
+                const line = document.createElement("div");
+                line.textContent = `Importing ${name}.py ...`;
+                box.appendChild(line);
+                await new Promise(r => setTimeout(r, 400 + Math.random() * 700));
+                line.textContent += " done";
+            }
+            const last = document.createElement("div");
+            last.textContent = "this website was made using HTML, CSS, JavaScript and Chart.js";
+            box.appendChild(last);
         }
 
         function runCell(cell) {
@@ -180,7 +229,7 @@
                 status.textContent = "Python 3 | Busy";
                 dot.classList.add("busy");
 
-                setTimeout(() => {
+                setTimeout(async () => {
                     count++;
                     cell.querySelector(".label").textContent = `In [${count}]:`;
 
@@ -194,6 +243,7 @@
                     outLabel.textContent = `Out[${count}]:`;
                     out.classList.remove("hidden");
                     if (out.querySelector("#skills-chart")) drawSkillsChart();
+                    if (out.querySelector(".import-lines")) await playImports(out);
 
                     status.textContent = "Python 3 | Idle";
                     dot.classList.remove("busy");
