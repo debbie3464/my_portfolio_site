@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Deborah Bhuyan's portfolio: CSE student into data and frontend.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
     <link rel="stylesheet" href="style.css">
     <title>Deborah Bhuyan | Portfolio</title>
 </head>
@@ -81,28 +83,41 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>projects.describe()</code>
+                    <code>projects_df</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    <div class="cards">
-                        <div class="card">
-                            <h3>Spotify Analysis</h3>
-                            <p>Analysis of my own Spotify listening data using Python, pandas and seaborn.</p>
-                            <a href="https://github.com/debbie3464/spotify-listening-analysis"
-                                target="_blank">GitHub</a>
-                        </div>
-                        <div class="card">
-                            <h3>Snake Game</h3>
-                            <p>Classic snake game built with Python and pygame.</p>
-                            <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
-                        </div>
-                        <div class="card">
-                            <h3>When It Rains</h3>
-                            <p>A pygame game where a cat dodges falling raindrops.</p>
-                            <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
-                        </div>
+                    <div class="table-wrap">
+                        <table class="df">
+                            <thead>
+                                <tr><th></th><th>project</th><th>tech</th><th>description</th><th>link</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>0</th>
+                                    <td>Spotify Analysis</td>
+                                    <td>Python, pandas, seaborn</td>
+                                    <td>Analysis of my own Spotify listening data</td>
+                                    <td><a href="https://github.com/debbie3464/spotify-listening-analysis" target="_blank">GitHub</a></td>
+                                </tr>
+                                <tr>
+                                    <th>1</th>
+                                    <td>Snake Game</td>
+                                    <td>Python, pygame</td>
+                                    <td>Classic snake game</td>
+                                    <td><a href="https://github.com/debbie3464" target="_blank">GitHub</a></td>
+                                </tr>
+                                <tr>
+                                    <th>2</th>
+                                    <td>When It Rains</td>
+                                    <td>Python, pygame</td>
+                                    <td>A cat dodges falling raindrops</td>
+                                    <td><a href="https://github.com/debbie3464" target="_blank">GitHub</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                    <p class="df-caption">3 rows × 4 columns</p>
                 </div>
             </div>
         </section>
@@ -116,7 +131,7 @@
                 </div>
                 <div class="output hidden">
                     <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
-                    <a href = "https://www.linkedin.com/in/deborah-bhuyan-54470039b/" target = "_blank"> linkedin</a>
+                    <a href="https://www.linkedin.com/in/deborah-bhuyan-54470039b/" target="_blank">LinkedIn</a>
                 </div>
             </div>
         </section>
