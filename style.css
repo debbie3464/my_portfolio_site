@@ -10,13 +10,11 @@
 html { scroll-behavior: smooth; }
 
 body {
-    background: var(--bg);
+    background: #eeeeee;
     color: var(--text);
     font-family: "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
 }
-
-section { max-width: 900px; margin: 0 auto; padding: 50px 20px; }
 
 /* navbar */
 .navbar {
@@ -25,37 +23,56 @@ section { max-width: 900px; margin: 0 auto; padding: 50px 20px; }
     padding: 12px 30px;
     background: var(--bg);
     border-bottom: 1px solid var(--border);
-    color: rgb(0, 0, 0)
+    color: rgb(0, 0, 0);
 }
 .logo { font-family: monospace; font-weight: bold; }
 .navbar ul { display: flex; gap: 24px; list-style: none; }
 .navbar a { color: var(--text); text-decoration: none; }
 .navbar a:hover { text-decoration: underline; }
 
-/* notebook cell */
-.cell { margin: 16px 0; 
-color: rgb(51, 41, 41);
+/* notebook container */
+.notebook {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px 0;
+    background: var(--bg);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
 }
+section { padding: 10px 30px; }
+
+/* notebook cell */
+.cell {
+    margin: 16px 0;
+    color: rgb(51, 41, 41);
+    border-left: 4px solid transparent;
+}
+.cell:hover { border-left-color: #1976d2; }
 
 .code {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 10px 12px;
+    position: relative;
+    display: flex; align-items: flex-start; gap: 12px;
     font-family: Consolas, "Courier New", monospace;
     font-size: 15px;
-    color:rgb(255, 0, 0);
+    color: rgb(255, 0, 0);
 }
 .label {
     min-width: 60px;
+    padding-top: 10px;
+    text-align: right;
     color: var(--muted);
     font-family: Consolas, "Courier New", monospace;
 }
-code { font-family: inherit; }
+code {
+    flex: 1;
+    font-family: inherit;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 10px 90px 10px 12px;
+}
 
 .run {
-    margin-left: auto;
+    position: absolute; top: 8px; right: 8px;
     background: var(--bg); color: var(--text);
     border: 1px solid var(--border);
     border-radius: 2px;
@@ -65,7 +82,7 @@ code { font-family: inherit; }
 .run:hover { background: #eee; }
 
 .output {
-    padding: 12px 12px 12px 84px; /* lines up under the code text */
+    padding: 12px 12px 12px 72px;
     font-family: Consolas, "Courier New", monospace;
     font-size: 15px;
 }
