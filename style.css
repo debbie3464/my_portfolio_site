@@ -120,3 +120,25 @@ footer {
     .navbar ul { gap: 12px; font-size: 14px; }
     .output { padding-left: 12px; }
 }
+
+.output { position: relative; }
+.out-label {
+    position: absolute; left: 0; top: 12px;
+    width: 60px; text-align: right;
+    color: var(--muted);
+}
+
+#run-all {
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 4px 10px; cursor: pointer; font-size: 13px;
+}
+#run-all:hover { background: #eee; }
+
+.kernel { font-size: 14px; color: var(--muted); }
+.dot {
+    display: inline-block; width: 10px; height: 10px;
+    border: 1px solid var(--muted); border-radius: 50%;
+}
+.dot.busy { background: var(--muted); }

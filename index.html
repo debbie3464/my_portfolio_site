@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>MY_portfolio</title>
+    <title>Deborah Bhuyan | Portfolio</title>
 </head>
 
 <body>
@@ -20,18 +20,20 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
 
-            <span class="kernel"><span class="dot"></span> Python 3</span>
+            <button id="run-all">▶▶ Run All</button>
+            <span class="kernel"><span class="dot"></span> <span id="kernel-status">Python 3 | Idle</span></span>
         </nav>
+
         <section id="home">
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
-            print("hello world")<br>
-            print("welcome to my portfolio :D")<br>
-            print("built with HTML, CSS and JavaScript")<br>
-            print("kernel is ready to run")
-        </code>
+                        print("hello world")<br>
+                        print("welcome to my portfolio :D")<br>
+                        print("built with HTML, CSS and JavaScript")<br>
+                        print("kernel is ready to run")
+                    </code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
@@ -39,16 +41,6 @@
                     welcome to my portfolio :D<br>
                     built with HTML, CSS and JavaScript<br>
                     kernel is ready to run
-                </div>
-            </div>
-            <div class="cell">
-                <div class="code">
-                    <span class="label">In [ ]:</span>
-                    <code>about_me()</code>
-                    <button class="run">▶ Run</button>
-                </div>
-                <div class="output hidden">
-                    "hello world"
                 </div>
             </div>
         </section>
@@ -61,7 +53,10 @@
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-
+                    Name: Deborah Bhuyan<br>
+                    Education: B.Tech CSE (AI &amp; Data Science), 2nd year<br>
+                    Interests: data analysis, Python, frontend<br>
+                    Looking for: first internship in Python / data analysis
                 </div>
             </div>
         </section>
@@ -76,7 +71,7 @@
                 <div class="output hidden">
                     <div class="tags">
                         <span>Python</span><span>pandas</span><span>SQL</span>
-                        <span>HTML/CSS</span><span>Git</span>
+                        <span>HTML/CSS</span><span>JavaScript</span><span>Git</span>
                     </div>
                 </div>
             </div>
@@ -93,8 +88,19 @@
                     <div class="cards">
                         <div class="card">
                             <h3>Spotify Analysis</h3>
-                            <p>One-line description.</p>
-                            <a href="https://github.com/debbie3464">GitHub</a>
+                            <p>Analysis of my own Spotify listening data using Python, pandas and seaborn.</p>
+                            <a href="https://github.com/debbie3464/spotify-listening-analysis"
+                                target="_blank">GitHub</a>
+                        </div>
+                        <div class="card">
+                            <h3>Snake Game</h3>
+                            <p>Classic snake game built with Python and pygame.</p>
+                            <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
+                        </div>
+                        <div class="card">
+                            <h3>When It Rains</h3>
+                            <p>A pygame game where a cat dodges falling raindrops.</p>
+                            <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
                         </div>
                     </div>
                 </div>
@@ -109,14 +115,56 @@
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    <a href="https://github.com/debbie3464">GitHub</a>
+                    <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
+                    <a href = "https://www.linkedin.com/in/deborah-bhuyan-54470039b/" target = "_blank"> linkedin</a>
                 </div>
             </div>
         </section>
 
         <footer># end of notebook</footer>
     </main>
-</body>
 
+    <script>
+        let count = 0;
+        const status = document.getElementById("kernel-status");
+        const dot = document.querySelector(".dot");
+
+        function runCell(cell) {
+            return new Promise(resolve => {
+                status.textContent = "Python 3 | Busy";
+                dot.classList.add("busy");
+
+                setTimeout(() => {
+                    count++;
+                    cell.querySelector(".label").textContent = `In [${count}]:`;
+
+                    const out = cell.querySelector(".output");
+                    let outLabel = out.querySelector(".out-label");
+                    if (!outLabel) {
+                        outLabel = document.createElement("span");
+                        outLabel.className = "out-label";
+                        out.prepend(outLabel);
+                    }
+                    outLabel.textContent = `Out[${count}]:`;
+                    out.classList.remove("hidden");
+
+                    status.textContent = "Python 3 | Idle";
+                    dot.classList.remove("busy");
+                    resolve();
+                }, 400);
+            });
+        }
+
+        document.querySelectorAll(".run").forEach(btn => {
+            btn.addEventListener("click", () => runCell(btn.closest(".cell")));
+        });
+
+        document.getElementById("run-all").addEventListener("click", async () => {
+            for (const cell of document.querySelectorAll(".cell")) {
+                await runCell(cell);
+            }
+        });
+    </script>
+</body>
 
 </html>
