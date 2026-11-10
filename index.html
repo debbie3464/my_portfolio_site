@@ -7,12 +7,23 @@
     <meta name="description" content="Deborah Bhuyan's portfolio: CSE student into data and frontend.">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
+
+    <!-- sets the saved theme before the page paints, so there is no white flash in dark mode -->
+    <script>
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem("theme"); } catch (e) { }
+            if (!theme) {
+                theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
+
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Pixelify+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
     <title>Deborah Bhuyan Portfolio</title>
 </head>
 
@@ -29,8 +40,20 @@
                 <li><a href="#certifications">Certifications</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button id="run-all">▶▶ Run All</button>
-            <span class="kernel"><span class="dot"></span> <span id="kernel-status">Python 3 | Idle</span></span>
+
+            <div class="menu-actions">
+                <button id="restart-btn" class="menu-btn" title="Restart the kernel and run every cell again">↻
+                    Restart &amp; Run All</button>
+
+                <button id="theme-toggle" class="menu-btn" role="switch" aria-checked="false"
+                    aria-label="Toggle dark mode">
+                    <span>theme:</span>
+                    <span class="track"><span class="thumb"></span></span>
+                    <span id="theme-name">light</span>
+                </button>
+
+                <span class="kernel"><span class="dot"></span> <span id="kernel-status">Python 3 | Idle</span></span>
+            </div>
         </nav>
 
         <section id="home">
@@ -73,10 +96,10 @@
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
-                me = Deborah()<br>
-                me.info()<br>
-                me.plot_strengths()
-            </code>
+                        me = Deborah()<br>
+                        me.info()<br>
+                        me.plot_strengths()
+                    </code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
@@ -84,10 +107,12 @@
                     University: Amity University Kolkata<br>
                     Currently studying: B.Tech CSE (AI &amp; Data Science)<br>
                     <br>
-                    I enjoy the side of coding that gives me creative control, lets me build things from scratch, and
-                    turns raw data into something people can actually see and understand. I'm looking for an internship
-                    where I can keep learning by building real things.
-                    <div class="chart-box">
+                    <div class="about-text">
+                        I enjoy the side of coding that gives me creative control, lets me build things from scratch,
+                        and turns raw data into something people can actually see and understand. I'm looking for an
+                        internship where I can keep learning by building real things.
+                    </div>
+                    <div class="chart-box tall">
                         <canvas id="radar-chart"></canvas>
                     </div>
                 </div>
@@ -98,34 +123,29 @@
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>
-                skills = {"Python": 40, "pandas": 20, "SQL": 15, "HTML/CSS/JS": 15, "Git": 10}<br>
-                plt.pie(skills.values(), labels=skills.keys())<br>
-                plt.show()
-            </code>
+<code class="pre">print(["Python", "pandas", "SQL", "HTML/CSS", "JavaScript", "Git"])
+
+time = {"Data": 50, "Web": 30, "Tools": 20}
+projects = {"Python": 3, "pygame": 2, "pandas": 1, "seaborn": 1}
+
+fig, (ax1, ax2) = plt.subplots(1, 2)
+ax1.pie(time.values(), labels=time.keys())
+ax2.barh(list(projects), projects.values())
+plt.show()</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    <div class="tags">
-                        <span>Python</span><span>pandas</span><span>SQL</span>
-                        <span>HTML/CSS</span><span>JavaScript</span><span>Git</span>
-                    </div>
-                    <div class="chart-box">
-                        <canvas id="skills-chart"></canvas>
+<pre class="py-out">['Python', 'pandas', 'SQL', 'HTML/CSS', 'JavaScript', 'Git']</pre>
+                    <div class="chart-row">
+                        <div class="chart-box">
+                            <canvas id="skills-pie"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <canvas id="tech-bar"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <div class="output hidden">
-            <div class="tags">
-                <span>Python</span><span>pandas</span><span>SQL</span>
-                <span>HTML/CSS</span><span>JavaScript</span><span>Git</span>
-            </div>
-            <div class="chart-box">
-                <canvas id="skills-chart"></canvas>
-            </div>
-        </div>
-        </div>
         </section>
 
         <section id="projects">
@@ -165,21 +185,23 @@
                                     <td>Python, pandas, seaborn</td>
                                     <td>Analysis of my own Spotify listening data</td>
                                     <td><a href="https://github.com/debbie3464/spotify-listening-analysis"
-                                            target="_blank">GitHub</a></td>
+                                            target="_blank" rel="noopener">GitHub</a></td>
                                 </tr>
                                 <tr>
                                     <th>1</th>
                                     <td>Snake Game</td>
                                     <td>Python, pygame</td>
                                     <td>Classic snake game</td>
-                                    <td><a href="https://github.com/debbie3464" target="_blank">GitHub</a></td>
+                                    <td><a href="https://github.com/debbie3464" target="_blank"
+                                            rel="noopener">GitHub</a></td>
                                 </tr>
                                 <tr>
                                     <th>2</th>
                                     <td>When It Rains</td>
                                     <td>Python, pygame</td>
                                     <td>A cat dodges falling raindrops</td>
-                                    <td><a href="https://github.com/debbie3464" target="_blank">GitHub</a></td>
+                                    <td><a href="https://github.com/debbie3464" target="_blank"
+                                            rel="noopener">GitHub</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -187,8 +209,43 @@
                     <p class="df-caption">3 rows × 4 columns</p>
                 </div>
             </div>
+
+            <div class="cell">
+                <div class="code">
+                    <span class="label">In [ ]:</span>
+<code class="pre"># me.describe()
+skills = {"Data": (2, 1), "Web": (1, 1), "Tools": (1, 0)}
+names = list(skills)
+comfy, learning = zip(*skills.values())
+
+print(f"{'category':&lt;10}{'comfortable':&gt;12}{'learning':&gt;10}")
+print("-" * 32)
+for name, (a, b) in skills.items():
+    print(f"{name:&lt;10}{a:&gt;12}{b:&gt;10}")
+print("-" * 32)
+print(f"{'total':&lt;10}{sum(comfy):&gt;12}{sum(learning):&gt;10}")
+
+plt.bar(names, comfy)
+plt.bar(names, learning, bottom=comfy)
+plt.show()</code>
+                    <button class="run">▶ Run</button>
+                </div>
+                <div class="output hidden">
+<pre class="py-out">category   comfortable  learning
+--------------------------------
+Data                 2         1
+Web                  1         1
+Tools                1         0
+--------------------------------
+total                4         2</pre>
+                    <div class="chart-box">
+                        <canvas id="category-bar"></canvas>
+                    </div>
+                </div>
+            </div>
         </section>
-        <section id="Certifications">
+
+        <section id="certifications">
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
@@ -196,23 +253,32 @@
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    <p>nth here yet
-                    <p>
+                    <p>nth here yet</p>
                 </div>
             </div>
         </section>
 
-        <section id="Contact">
+        <section id="contact">
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>contact.send()</code>
+                    <code>contact.show()</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-                    <a href="https://github.com/debbie3464" target="_blank">GitHub</a>
-                    <a href="https://www.linkedin.com/in/deborah-bhuyan-54470039b/" target="_blank">LinkedIn</a>
-                    <a>Email</a>
+                    <dl class="contact-list">
+                        <dt>github</dt>
+                        <dd><a href="https://github.com/debbie3464" target="_blank"
+                                rel="noopener">github.com/debbie3464</a></dd>
+
+                        <dt>linkedin</dt>
+                        <dd><a href="https://www.linkedin.com/in/deborah-bhuyan-54470039b/" target="_blank"
+                                rel="noopener">linkedin.com/in/deborah-bhuyan-54470039b</a></dd>
+
+                        <!-- TODO: put your real email address in both places below -->
+                        <dt>email</dt>
+                        <dd><a href="mailto:your-email@example.com">your-email@example.com</a></dd>
+                    </dl>
                 </div>
             </div>
         </section>
@@ -223,78 +289,185 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
     <script>
+        /* ---------- EDIT YOUR NUMBERS HERE ---------- */
+        const DATA = {
+            // pie: rough share of your coding time (should add up to 100)
+            time: { Data: 50, Web: 30, Tools: 20 },
+
+            // bar: how many projects use each technology
+            projects: { Python: 3, pygame: 2, pandas: 1, seaborn: 1 },
+
+            // radar: how you work, out of 10 (self-assessed)
+            strengths: {
+                "Creative problem-solving": 9,
+                "Learning speed": 8,
+                "Attention to detail": 7,
+                "Data thinking": 7,
+                "Frontend polish": 6,
+                "Debugging patience": 5
+            },
+
+            // stacked bar: [comfortable, learning] skill counts per category
+            categories: { Data: [2, 1], Web: [1, 1], Tools: [1, 0] }
+        };
+        /* -------------------------------------------- */
+
         let count = 0;
-        const status = document.getElementById("kernel-status");
+        let running = false;
+        let importsDone = false;
+        const kernelStatus = document.getElementById("kernel-status");
         const dot = document.querySelector(".dot");
+        const restartBtn = document.getElementById("restart-btn");
+        const themeBtn = document.getElementById("theme-toggle");
+        const themeName = document.getElementById("theme-name");
 
-        let skillsChart = null;
-        function drawSkillsChart() {
-            if (skillsChart) return;
+        const PALETTE = ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b3"];
 
-            skillsChart = new Chart(document.getElementById("skills-chart"), {
+        // reads a colour from style.css so charts follow light/dark mode
+        const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+        function setChartDefaults() {
+            Chart.defaults.font.family = '"Helvetica Neue", Arial, sans-serif';
+            Chart.defaults.font.size = 13;
+            Chart.defaults.color = css("--output-text");
+            Chart.defaults.borderColor = css("--grid");
+        }
+
+        /* ---------- chart recipes (one per canvas id) ---------- */
+        const chartConfigs = {
+            "skills-pie": () => ({
                 type: "pie",
                 data: {
-                    labels: ["Python", "pandas", "SQL", "HTML/CSS/JS", "Git"],
+                    labels: Object.keys(DATA.time),
                     datasets: [{
-                        data: [40, 20, 15, 15, 10],
-                        backgroundColor: ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b3"],
-                        borderColor: "#ffffff",
+                        data: Object.values(DATA.time),
+                        backgroundColor: PALETTE,
+                        borderColor: css("--bg"),
                         borderWidth: 2
                     }]
                 },
                 options: {
+                    maintainAspectRatio: false,
                     plugins: {
-                        title: { display: true, text: "Where my coding time goes" },
-                        legend: { position: "right" },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%`
-                            }
+                        title: { display: true, text: "Where my coding time goes (rough estimate)" },
+                        legend: { position: "bottom" },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+                    }
+                }
+            }),
+
+            "tech-bar": () => ({
+                type: "bar",
+                data: {
+                    labels: Object.keys(DATA.projects),
+                    datasets: [{
+                        label: "projects",
+                        data: Object.values(DATA.projects),
+                        backgroundColor: PALETTE[0]
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: "Projects per technology" },
+                        legend: { display: false }
+                    },
+                    scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            }),
+
+            "category-bar": () => {
+                const values = Object.values(DATA.categories);
+                return {
+                    type: "bar",
+                    data: {
+                        labels: Object.keys(DATA.categories),
+                        datasets: [
+                            { label: "comfortable", data: values.map(v => v[0]), backgroundColor: PALETTE[0] },
+                            { label: "learning", data: values.map(v => v[1]), backgroundColor: PALETTE[1] }
+                        ]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: { display: true, text: "Skills by category" },
+                            legend: { position: "bottom" }
+                        },
+                        scales: {
+                            x: { stacked: true },
+                            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+                        }
+                    }
+                };
+            },
+
+            "radar-chart": () => ({
+                type: "radar",
+                data: {
+                    labels: Object.keys(DATA.strengths),
+                    datasets: [{
+                        label: "self-assessed",
+                        data: Object.values(DATA.strengths),
+                        backgroundColor: "rgba(76, 114, 176, 0.25)",
+                        borderColor: PALETTE[0],
+                        pointBackgroundColor: PALETTE[0],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: "How I work (self-assessed)" },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 10,
+                            ticks: { stepSize: 2, backdropColor: "transparent" }
                         }
                     }
                 }
-            });
-        }
-        let radarChart = null;
-function drawRadarChart() {
-    if (radarChart) return;
+            })
+        };
 
-    radarChart = new Chart(document.getElementById("radar-chart"), {
-        type: "radar",
-        data: {
-            labels: [
-                "Creative problem-solving",
-                "Learning speed",
-                "Attention to detail",
-                "Data thinking",
-                "Frontend polish",
-                "Debugging patience"
-            ],
-            datasets: [{
-                label: "self-assessed",
-                data: [9, 8, 7, 7, 6, 5],
-                backgroundColor: "rgba(76, 114, 176, 0.25)",
-                borderColor: "#4c72b0",
-                pointBackgroundColor: "#4c72b0",
-                borderWidth: 2
-            }]
-        },
-        options: {
-            plugins: {
-                title: { display: true, text: "How I work (self-assessed)" },
-                legend: { display: false }
-            },
-            scales: {
-                r: {
-                    min: 0,
-                    max: 10,
-                    ticks: { stepSize: 2, backdropColor: "transparent" }
-                }
+        const charts = {};
+
+        function drawChart(id) {
+            if (charts[id] || !chartConfigs[id]) return;
+            setChartDefaults();
+            charts[id] = new Chart(document.getElementById(id), chartConfigs[id]());
+        }
+
+        // when the theme changes, rebuild every chart that is already on screen
+        function redrawCharts() {
+            setChartDefaults();
+            for (const id in charts) {
+                charts[id].destroy();
+                charts[id] = new Chart(document.getElementById(id), chartConfigs[id]());
             }
         }
-    });
-}
-        let importsDone = false;
+
+        /* ---------- dark mode ---------- */
+        function applyTheme(theme, save) {
+            document.documentElement.setAttribute("data-theme", theme);
+            themeBtn.setAttribute("aria-checked", theme === "dark");
+            themeName.textContent = theme;
+            if (save) {
+                try { localStorage.setItem("theme", theme); } catch (e) { }
+            }
+            redrawCharts();
+        }
+
+        themeBtn.addEventListener("click", () => {
+            const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            applyTheme(next, true);
+        });
+
+        applyTheme(document.documentElement.getAttribute("data-theme"), false);
+
+        /* ---------- fake "importing" animation ---------- */
         async function playImports(out) {
             if (importsDone) return;
             importsDone = true;
@@ -311,11 +484,15 @@ function drawRadarChart() {
             box.appendChild(last);
         }
 
-        function runCell(cell) {
+        /* ---------- running cells ---------- */
+        // fast = true is used by the auto-run on page load (shorter wait)
+        function runCell(cell, fast = false) {
             return new Promise(resolve => {
-                status.textContent = "Python 3 | Busy";
-                dot.classList.add("busy");
-  
+                if (!fast) {
+                    kernelStatus.textContent = "Python 3 | Busy";
+                    dot.classList.add("busy");
+                }
+
                 setTimeout(async () => {
                     count++;
                     cell.querySelector(".label").textContent = `In [${count}]:`;
@@ -329,26 +506,107 @@ function drawRadarChart() {
                     }
                     outLabel.textContent = `Out[${count}]:`;
                     out.classList.remove("hidden");
-                    if (out.querySelector("#skills-chart")) drawSkillsChart();
-                    if (out.querySelector("#radar-chart")) drawRadarChart();
-                    if (out.querySelector(".import-lines")) await playImports(out);
 
-                    status.textContent = "Python 3 | Idle";
-                    dot.classList.remove("busy");
+                    out.querySelectorAll("canvas").forEach(c => drawChart(c.id));
+
+                    if (out.querySelector(".import-lines")) {
+                        if (fast) playImports(out);      // let it play in the background
+                        else await playImports(out);
+                    }
+
+                    if (!fast) {
+                        kernelStatus.textContent = "Python 3 | Idle";
+                        dot.classList.remove("busy");
+                    }
                     resolve();
-                }, 400);
+                }, fast ? 150 : 400);
             });
         }
 
-        document.querySelectorAll(".run").forEach(btn => {
-            btn.addEventListener("click", () => runCell(btn.closest(".cell")));
+        async function runAll(fast = false) {
+            if (running) return;
+            running = true;
+            restartBtn.disabled = true;
+            kernelStatus.textContent = "Python 3 | Busy";
+            dot.classList.add("busy");
+
+            for (const cell of document.querySelectorAll(".cell")) {
+                await runCell(cell, fast);
+            }
+
+            kernelStatus.textContent = "Python 3 | Idle";
+            dot.classList.remove("busy");
+            restartBtn.disabled = false;
+            running = false;
+        }
+
+        /* ---------- restart: put every cell back to its unrun state ---------- */
+        function resetCells() {
+            count = 0;
+            importsDone = false;
+
+            for (const id in charts) {
+                charts[id].destroy();
+                delete charts[id];
+            }
+
+            document.querySelectorAll(".cell").forEach(cell => {
+                cell.querySelector(".label").textContent = "In [ ]:";
+                const out = cell.querySelector(".output");
+                out.classList.add("hidden");
+
+                const outLabel = out.querySelector(".out-label");
+                if (outLabel) outLabel.remove();
+
+                const importBox = out.querySelector(".import-lines");
+                if (importBox) importBox.innerHTML = "";
+            });
+        }
+
+        function stopGlow() {
+            restartBtn.classList.remove("glow");
+        }
+
+        restartBtn.addEventListener("mouseenter", stopGlow);
+        restartBtn.addEventListener("focus", stopGlow);
+        restartBtn.addEventListener("animationend", stopGlow);
+
+        restartBtn.addEventListener("click", async () => {
+            if (running) return;
+            stopGlow();
+            restartBtn.disabled = true;
+            kernelStatus.textContent = "Python 3 | Restarting...";
+            dot.classList.add("busy");
+
+            resetCells();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+            await new Promise(r => setTimeout(r, 700));
+            await runAll(false);
         });
 
-        document.getElementById("run-all").addEventListener("click", async () => {
-            for (const cell of document.querySelectorAll(".cell")) {
-                await runCell(cell);
-            }
+        document.querySelectorAll(".run").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (running) return;
+                runCell(btn.closest(".cell"));
+            });
         });
+
+        /* ---------- on page load: run everything, then make the restart button glow ---------- */
+        async function startup() {
+            kernelStatus.textContent = "Python 3 | Starting...";
+            dot.classList.add("busy");
+
+            // make sure the code font is ready before anything shows
+            try { await document.fonts.load('14px "JetBrains Mono"'); } catch (e) { }
+
+            await new Promise(r => setTimeout(r, 600));
+            await runAll(true);
+
+            restartBtn.classList.add("glow");
+        }
+
+        startup();
     </script>
 </body>
 
