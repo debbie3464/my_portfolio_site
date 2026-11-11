@@ -42,8 +42,10 @@
             </ul>
 
             <div class="menu-actions">
-                <button id="restart-btn" class="menu-btn" title="Restart the kernel and run every cell again">↻
-                    Restart &amp; Run All</button>
+                <button id="run-all" class="menu-btn" title="Run every cell">▶▶ Run All</button>
+
+                <button id="restart-btn" class="menu-btn" title="Restart the kernel and clear all outputs">↻
+                    Restart</button>
 
                 <button id="theme-toggle" class="menu-btn" role="switch" aria-checked="false"
                     aria-label="Toggle dark mode">
@@ -57,7 +59,7 @@
         </nav>
 
         <section id="home">
-            <div class="cell">
+            <div class="cell" style="--i: 0">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -72,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="cell">
+            <div class="cell" style="--i: 1">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -92,7 +94,7 @@
         </section>
 
         <section id="about">
-            <div class="cell">
+            <div class="cell" style="--i: 2">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -120,7 +122,7 @@
         </section>
 
         <section id="skills">
-            <div class="cell">
+            <div class="cell" style="--i: 3">
                 <div class="code">
                     <span class="label">In [ ]:</span>
 <code class="pre">print(["Python", "pandas", "SQL", "HTML/CSS", "JavaScript", "Git"])
@@ -149,7 +151,7 @@ plt.show()</code>
         </section>
 
         <section id="projects">
-            <div class="cell">
+            <div class="cell" style="--i: 4">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -209,57 +211,43 @@ plt.show()</code>
                     <p class="df-caption">3 rows × 4 columns</p>
                 </div>
             </div>
+        </section>
 
-            <div class="cell">
+        <section id="certifications">
+            <div class="cell" style="--i: 5">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-<code class="pre"># me.describe()
-skills = {"Data": (2, 1), "Web": (1, 1), "Tools": (1, 0)}
-names = list(skills)
-comfy, learning = zip(*skills.values())
+<code class="pre">import os
+from IPython.display import Image, display
 
-print(f"{'category':&lt;10}{'comfortable':&gt;12}{'learning':&gt;10}")
-print("-" * 32)
-for name, (a, b) in skills.items():
-    print(f"{name:&lt;10}{a:&gt;12}{b:&gt;10}")
-print("-" * 32)
-print(f"{'total':&lt;10}{sum(comfy):&gt;12}{sum(learning):&gt;10}")
-
-plt.bar(names, comfy)
-plt.bar(names, learning, bottom=comfy)
-plt.show()</code>
+for file in os.listdir("Certificates"):
+    display(Image(f"Certificates/{file}"))</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
-<pre class="py-out">category   comfortable  learning
---------------------------------
-Data                 2         1
-Web                  1         1
-Tools                1         0
---------------------------------
-total                4         2</pre>
-                    <div class="chart-box">
-                        <canvas id="category-bar"></canvas>
+                    <div class="cert-grid">
+                        <a href="Certificates/IbmpythonCertificate.png" target="_blank" rel="noopener">
+                            <img src="Certificates/IbmpythonCertificate.png"
+                                alt="IBM Programming with Python certificate" loading="lazy">
+                        </a>
+                        <a href="Certificates/IIThyderabad.png" target="_blank" rel="noopener">
+                            <img src="Certificates/IIThyderabad.png" alt="IIT Hyderabad certificate of participation"
+                                loading="lazy">
+                        </a>
+                        <a href="Certificates/NITdelhi.png" target="_blank" rel="noopener">
+                            <img src="Certificates/NITdelhi.png" alt="NIT Delhi certificate of participation"
+                                loading="lazy">
+                        </a>
+                        <a href="Certificates/Top30.png" target="_blank" rel="noopener">
+                            <img src="Certificates/Top30.png" alt="Top 30 certificate" loading="lazy">
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="certifications">
-            <div class="cell">
-                <div class="code">
-                    <span class="label">In [ ]:</span>
-                    <code>print(my certifications)</code>
-                    <button class="run">▶ Run</button>
-                </div>
-                <div class="output hidden">
-                    <p>nth here yet</p>
-                </div>
-            </div>
-        </section>
-
         <section id="contact">
-            <div class="cell">
+            <div class="cell" style="--i: 6">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>contact.show()</code>
@@ -275,9 +263,8 @@ total                4         2</pre>
                         <dd><a href="https://www.linkedin.com/in/deborah-bhuyan-54470039b/" target="_blank"
                                 rel="noopener">linkedin.com/in/deborah-bhuyan-54470039b</a></dd>
 
-                        <!-- TODO: put your real email address in both places below -->
                         <dt>email</dt>
-                        <dd><a href="mailto:your-email@example.com">your-email@example.com</a></dd>
+                        <dd><a href="mailto:deborahbhuyan58@gmail.com">deborahbhuyan58@gmail.com</a></dd>
                     </dl>
                 </div>
             </div>
@@ -305,10 +292,7 @@ total                4         2</pre>
                 "Data thinking": 7,
                 "Frontend polish": 6,
                 "Debugging patience": 5
-            },
-
-            // stacked bar: [comfortable, learning] skill counts per category
-            categories: { Data: [2, 1], Web: [1, 1], Tools: [1, 0] }
+            }
         };
         /* -------------------------------------------- */
 
@@ -317,9 +301,15 @@ total                4         2</pre>
         let importsDone = false;
         const kernelStatus = document.getElementById("kernel-status");
         const dot = document.querySelector(".dot");
+        const runAllBtn = document.getElementById("run-all");
         const restartBtn = document.getElementById("restart-btn");
         const themeBtn = document.getElementById("theme-toggle");
         const themeName = document.getElementById("theme-name");
+
+        // the arrival animation: each cell appears 0.3s after the one before (matches style.css)
+        const ARRIVE_STEP = 300;
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
 
         const PALETTE = ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b3"];
 
@@ -376,31 +366,6 @@ total                4         2</pre>
                     scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
                 }
             }),
-
-            "category-bar": () => {
-                const values = Object.values(DATA.categories);
-                return {
-                    type: "bar",
-                    data: {
-                        labels: Object.keys(DATA.categories),
-                        datasets: [
-                            { label: "comfortable", data: values.map(v => v[0]), backgroundColor: PALETTE[0] },
-                            { label: "learning", data: values.map(v => v[1]), backgroundColor: PALETTE[1] }
-                        ]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: { display: true, text: "Skills by category" },
-                            legend: { position: "bottom" }
-                        },
-                        scales: {
-                            x: { stacked: true },
-                            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
-                        }
-                    }
-                };
-            },
 
             "radar-chart": () => ({
                 type: "radar",
@@ -468,7 +433,8 @@ total                4         2</pre>
         applyTheme(document.documentElement.getAttribute("data-theme"), false);
 
         /* ---------- fake "importing" animation ---------- */
-        async function playImports(out) {
+        // fast = true is used during the arrival so it finishes inside the 2.5 seconds
+        async function playImports(out, fast = false) {
             if (importsDone) return;
             importsDone = true;
             const box = out.querySelector(".import-lines");
@@ -476,7 +442,7 @@ total                4         2</pre>
                 const line = document.createElement("div");
                 line.textContent = `Importing ${name}.py ...`;
                 box.appendChild(line);
-                await new Promise(r => setTimeout(r, 400 + Math.random() * 700));
+                await sleep(fast ? 220 + Math.random() * 180 : 400 + Math.random() * 700);
                 line.textContent += " done";
             }
             const last = document.createElement("div");
@@ -510,7 +476,7 @@ total                4         2</pre>
                     out.querySelectorAll("canvas").forEach(c => drawChart(c.id));
 
                     if (out.querySelector(".import-lines")) {
-                        if (fast) playImports(out);      // let it play in the background
+                        if (fast) playImports(out, true);   // let it play in the background
                         else await playImports(out);
                     }
 
@@ -523,19 +489,27 @@ total                4         2</pre>
             });
         }
 
-        async function runAll(fast = false) {
+        // arrive = true is the automatic run on page load, timed to match the arrival animation
+        async function runAll(arrive = false) {
             if (running) return;
             running = true;
+            runAllBtn.disabled = true;
             restartBtn.disabled = true;
             kernelStatus.textContent = "Python 3 | Busy";
             dot.classList.add("busy");
 
-            for (const cell of document.querySelectorAll(".cell")) {
-                await runCell(cell, fast);
+            const cells = document.querySelectorAll(".cell");
+            for (let i = 0; i < cells.length; i++) {
+                if (arrive && !reduceMotion) {
+                    const wait = i * ARRIVE_STEP + 350 - performance.now();
+                    if (wait > 0) await sleep(wait);
+                }
+                await runCell(cells[i], arrive);
             }
 
             kernelStatus.textContent = "Python 3 | Idle";
             dot.classList.remove("busy");
+            runAllBtn.disabled = false;
             restartBtn.disabled = false;
             running = false;
         }
@@ -575,15 +549,22 @@ total                4         2</pre>
             if (running) return;
             stopGlow();
             restartBtn.disabled = true;
+            runAllBtn.disabled = true;
             kernelStatus.textContent = "Python 3 | Restarting...";
             dot.classList.add("busy");
 
             resetCells();
             window.scrollTo({ top: 0, behavior: "smooth" });
 
-            await new Promise(r => setTimeout(r, 700));
-            await runAll(false);
+            await sleep(700);
+
+            kernelStatus.textContent = "Python 3 | Idle";
+            dot.classList.remove("busy");
+            restartBtn.disabled = false;
+            runAllBtn.disabled = false;
         });
+
+        runAllBtn.addEventListener("click", () => runAll(false));
 
         document.querySelectorAll(".run").forEach(btn => {
             btn.addEventListener("click", () => {
@@ -592,7 +573,7 @@ total                4         2</pre>
             });
         });
 
-        /* ---------- on page load: run everything, then make the restart button glow ---------- */
+        /* ---------- on page load: arrival animation + auto run, then make the restart button glow ---------- */
         async function startup() {
             kernelStatus.textContent = "Python 3 | Starting...";
             dot.classList.add("busy");
@@ -600,7 +581,6 @@ total                4         2</pre>
             // make sure the code font is ready before anything shows
             try { await document.fonts.load('14px "JetBrains Mono"'); } catch (e) { }
 
-            await new Promise(r => setTimeout(r, 600));
             await runAll(true);
 
             restartBtn.classList.add("glow");

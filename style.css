@@ -51,6 +51,23 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* ---------- arrival animation (2.5s in total) ----------
+   7 cells x 0.3s stagger (last one starts at 1.8s) + 0.7s fade = 2.5s.
+   Each cell has its own --i number in the HTML. */
+@keyframes arrive {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+}
+
+@keyframes navArrive {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+}
+
 /* ---------- navbar (styled like a notebook menu bar) ---------- */
 .navbar {
     position: sticky;
@@ -65,6 +82,7 @@ body {
     background: var(--bg);
     border-bottom: 1px solid var(--border);
     font-size: 14px;
+    animation: navArrive 0.6s ease-out backwards;
     transition: background 0.3s ease;
 }
 
@@ -118,7 +136,7 @@ body {
     cursor: default;
 }
 
-/* soft pulse that tells visitors they can restart and run everything again */
+/* soft pulse that tells visitors they can restart the kernel (only the restart button gets this) */
 @keyframes glow {
 
     0%,
@@ -198,6 +216,8 @@ section {
     color: var(--text);
     border-left: 4px solid transparent;
     transition: background 0.25s ease, border-color 0.25s ease;
+    animation: arrive 0.7s ease-out backwards;
+    animation-delay: calc(var(--i, 0) * 0.3s);
 }
 
 .cell:hover {
@@ -317,6 +337,30 @@ code.pre {
 
 .chart-row .chart-box {
     flex: 1 1 280px;
+}
+
+/* ---------- certificates ---------- */
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.cert-grid a {
+    display: block;
+}
+
+.cert-grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: border-color 0.2s ease;
+}
+
+.cert-grid a:hover img {
+    border-color: var(--accent);
 }
 
 /* ---------- dataframe table: sans-serif, like pandas in Jupyter ---------- */
