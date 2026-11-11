@@ -15,17 +15,29 @@
             try { theme = localStorage.getItem("theme"); } catch (e) { }
             if (theme !== "pink") theme = "light";
             document.documentElement.setAttribute("data-theme", theme);
+
+            // show the loading screen (skipped for people who turned animations off)
+            if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                document.documentElement.classList.add("loading");
+            }
         })();
     </script>
 
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Pixelify+Sans&family=Comic+Neue&family=Anton&display=swap"
+        rel="stylesheet">
     <title>Deborah Bhuyan Portfolio</title>
 </head>
 
 <body>
+    <div id="loader" role="status">
+        <p id="loader-text">Loading Deborah's_portfolio.ipynb...</p>
+        <small>click anywhere to skip</small>
+    </div>
+
     <main class="notebook">
         <nav class="navbar">
             <span class="logo">Deborah's_portfolio.ipynb</span>
@@ -45,8 +57,7 @@
                 <button id="restart-btn" class="menu-btn" title="Restart the kernel and clear all outputs">↻
                     Restart</button>
 
-                <button id="theme-toggle" class="menu-btn" role="switch" aria-checked="false"
-                    aria-label="Switch theme">
+                <button id="theme-toggle" class="menu-btn" role="switch" aria-checked="false" aria-label="Switch theme">
                     <span>theme:</span>
                     <span id="theme-name" class="theme-name">
                         <span id="tn-word">light</span>
@@ -163,10 +174,10 @@ plt.show()</code>
                         import pandas as pd<br>
                         <br>
                         projects_df = pd.DataFrame({<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;"project": ["Spotify Analysis", "Snake Game", "When It Rains"],<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;"tech": ["Python, pandas, seaborn", "Python, pygame", "Python, pygame"],<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;"description": ["Analysis of my own Spotify listening data", "Classic snake game", "A cat dodges falling raindrops"],<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;"link": ["GitHub", "GitHub", "GitHub"]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"project": ["Spotify Analysis", "Pygame Projects", "Expense Tracker", "LeetCode Solutions"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"tech": ["Python, pandas, seaborn", "Python, pygame", "add tech here", "DSA"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"description": ["Analysis of my own Spotify listening data", "Games built with pygame, including Snake and When It Rains", "Tracks daily and monthly spending against a limit", "Daily LeetCode problem solutions"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"link": ["GitHub", "GitHub", "GitHub", "GitHub"]<br>
                         })<br>
                         <br>
                         projects_df
@@ -196,24 +207,32 @@ plt.show()</code>
                                 </tr>
                                 <tr>
                                     <th>1</th>
-                                    <td>Snake Game</td>
+                                    <td>Pygame Projects</td>
                                     <td>Python, pygame</td>
-                                    <td>Classic snake game</td>
-                                    <td><a href="https://github.com/debbie3464" target="_blank"
+                                    <td>Games built with pygame, including Snake and When It Rains</td>
+                                    <td><a href="https://github.com/debbie3464/Pygames" target="_blank"
                                             rel="noopener">GitHub</a></td>
                                 </tr>
                                 <tr>
                                     <th>2</th>
-                                    <td>When It Rains</td>
-                                    <td>Python, pygame</td>
-                                    <td>A cat dodges falling raindrops</td>
-                                    <td><a href="https://github.com/debbie3464" target="_blank"
+                                    <td>Expense Tracker</td>
+                                    <td>add tech here</td>
+                                    <td>Tracks daily and monthly spending against a limit</td>
+                                    <td><a href="https://github.com/debbie3464?tab=repositories" target="_blank"
+                                            rel="noopener">GitHub</a></td>
+                                </tr>
+                                <tr>
+                                    <th>3</th>
+                                    <td>LeetCode Solutions</td>
+                                    <td>DSA</td>
+                                    <td>Daily LeetCode problem solutions</td>
+                                    <td><a href="https://github.com/debbie3464/leetcode-solutions" target="_blank"
                                             rel="noopener">GitHub</a></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="df-caption">3 rows × 4 columns</p>
+                    <p class="df-caption">4 rows × 4 columns</p>
                 </div>
             </div>
         </section>
@@ -319,10 +338,43 @@ for file in os.listdir("Certificates"):
         const typedCode = document.getElementById("typed-code");
         const TYPED_TEXT = typedCode.textContent;
 
-        // the page fades in over 3s (see style.css); the cells start running once the fade is under way
-        const ARRIVE_DELAY = 700;
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        /* ---------- loading screen ---------- */
+        const htmlEl = document.documentElement;
+        const loaderText = document.getElementById("loader-text");
+        const LOADER_FONTS = ["f-comic", "f-pixel", "f-impact", ""];   // "" = back to the normal notebook font
+        const FONT_STEP = 400;   // ms between font changes
+        const HOLD = 300;        // ms to stay on the last font before the fade starts
+
+        let openGate;
+        const gate = new Promise(r => openGate = r);   // the cells wait for this before auto-running
+        let loaderOpen = false;
+
+        function openNotebook() {
+            if (loaderOpen) return;
+            loaderOpen = true;
+            htmlEl.classList.remove("loading");   // loader fades out, notebook fades in
+            openGate();                           // cells start running during the crossfade
+        }
+
+        async function playLoader() {
+            if (!htmlEl.classList.contains("loading")) { openGate(); return; }
+
+            document.getElementById("loader").addEventListener("click", openNotebook);
+
+            // download the extra fonts now so the swaps are instant
+            ['16px "Pixelify Sans"', '16px "Comic Neue"', '16px Anton'].forEach(f => document.fonts.load(f).catch(() => { }));
+
+            for (const cls of LOADER_FONTS) {
+                await sleep(FONT_STEP);
+                if (loaderOpen) return;
+                loaderText.className = cls;
+            }
+            await sleep(HOLD);
+            openNotebook();
+        }
 
         // reads a colour from style.css so charts follow the current theme
         const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -557,10 +609,8 @@ for file in os.listdir("Certificates"):
             kernelStatus.textContent = "Python 3 | Busy";
             dot.classList.add("busy");
 
-            if (arrive && !reduceMotion) {
-                const wait = ARRIVE_DELAY - performance.now();
-                if (wait > 0) await sleep(wait);
-            }
+            // on page load, wait until the loading screen starts to fade
+            if (arrive) await gate;
 
             for (const cell of document.querySelectorAll(".cell")) {
                 await runCell(cell, arrive);
@@ -662,8 +712,10 @@ for file in os.listdir("Certificates"):
             });
         });
 
-        /* ---------- on page load: fade in, auto run everything, then make the restart button glow ---------- */
+        /* ---------- on page load: loading screen, then auto run everything, then make the restart button glow ---------- */
         async function startup() {
+            playLoader();
+
             kernelStatus.textContent = "Python 3 | Starting...";
             dot.classList.add("busy");
 
