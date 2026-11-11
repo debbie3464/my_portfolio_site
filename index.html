@@ -59,13 +59,11 @@
         </nav>
 
         <section id="home">
-            <div class="cell" style="--i: 0">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-                    <code>
-                        print("hello world !!")<br>
-                        print("welcome to my portfolio :D")
-                    </code>
+<code class="pre" id="typed-code">print("hello world !!")
+print("welcome to my portfolio :D")</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
@@ -74,7 +72,7 @@
                 </div>
             </div>
 
-            <div class="cell" style="--i: 1">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -94,7 +92,7 @@
         </section>
 
         <section id="about">
-            <div class="cell" style="--i: 2">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -122,7 +120,7 @@
         </section>
 
         <section id="skills">
-            <div class="cell" style="--i: 3">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
 <code class="pre">print(["Python", "pandas", "SQL", "HTML/CSS", "JavaScript", "Git"])
@@ -151,7 +149,7 @@ plt.show()</code>
         </section>
 
         <section id="projects">
-            <div class="cell" style="--i: 4">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
@@ -214,7 +212,7 @@ plt.show()</code>
         </section>
 
         <section id="certifications">
-            <div class="cell" style="--i: 5">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
 <code class="pre">import os
@@ -225,21 +223,22 @@ for file in os.listdir("Certificates"):
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
+                    <h3 class="out-title">My Certifications</h3>
                     <div class="cert-grid">
-                        <a href="Certificates/IbmpythonCertificate.png" target="_blank" rel="noopener">
-                            <img src="Certificates/IbmpythonCertificate.png"
+                        <a href="Certificates/IbmpythonCertificate.jpg" target="_blank" rel="noopener">
+                            <img src="Certificates/IbmpythonCertificate.jpg"
                                 alt="IBM Programming with Python certificate" loading="lazy">
                         </a>
-                        <a href="Certificates/IIThyderabad.png" target="_blank" rel="noopener">
-                            <img src="Certificates/IIThyderabad.png" alt="IIT Hyderabad certificate of participation"
+                        <a href="Certificates/IIThyderabad.jpg" target="_blank" rel="noopener">
+                            <img src="Certificates/IIThyderabad.jpg" alt="IIT Hyderabad certificate of participation"
                                 loading="lazy">
                         </a>
-                        <a href="Certificates/NITdelhi.png" target="_blank" rel="noopener">
-                            <img src="Certificates/NITdelhi.png" alt="NIT Delhi certificate of participation"
+                        <a href="Certificates/NITdelhi.jpg" target="_blank" rel="noopener">
+                            <img src="Certificates/NITdelhi.jpg" alt="NIT Delhi certificate of participation"
                                 loading="lazy">
                         </a>
-                        <a href="Certificates/Top30.png" target="_blank" rel="noopener">
-                            <img src="Certificates/Top30.png" alt="Top 30 certificate" loading="lazy">
+                        <a href="Certificates/Top30.jpg" target="_blank" rel="noopener">
+                            <img src="Certificates/Top30.jpg" alt="Top 30 certificate" loading="lazy">
                         </a>
                     </div>
                 </div>
@@ -247,7 +246,7 @@ for file in os.listdir("Certificates"):
         </section>
 
         <section id="contact">
-            <div class="cell" style="--i: 6">
+            <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>contact.show()</code>
@@ -299,6 +298,7 @@ for file in os.listdir("Certificates"):
         let count = 0;
         let running = false;
         let importsDone = false;
+        let fadeTimer = null;
         const kernelStatus = document.getElementById("kernel-status");
         const dot = document.querySelector(".dot");
         const runAllBtn = document.getElementById("run-all");
@@ -306,8 +306,12 @@ for file in os.listdir("Certificates"):
         const themeBtn = document.getElementById("theme-toggle");
         const themeName = document.getElementById("theme-name");
 
-        // the arrival animation: each cell appears 0.3s after the one before (matches style.css)
-        const ARRIVE_STEP = 300;
+        // the first cell's code: it types itself out again after a restart
+        const typedCode = document.getElementById("typed-code");
+        const TYPED_TEXT = typedCode.textContent;
+
+        // the page fades in over 3s (see style.css); the cells start running once the fade is under way
+        const ARRIVE_DELAY = 700;
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -405,12 +409,14 @@ for file in os.listdir("Certificates"):
             charts[id] = new Chart(document.getElementById(id), chartConfigs[id]());
         }
 
-        // when the theme changes, rebuild every chart that is already on screen
+        // rebuilds every chart that is already on screen (used when the theme changes)
         function redrawCharts() {
             setChartDefaults();
             for (const id in charts) {
                 charts[id].destroy();
-                charts[id] = new Chart(document.getElementById(id), chartConfigs[id]());
+                const config = chartConfigs[id]();
+                config.options.animation = false;   // no re-grow, only the colours changed
+                charts[id] = new Chart(document.getElementById(id), config);
             }
         }
 
@@ -422,18 +428,34 @@ for file in os.listdir("Certificates"):
             if (save) {
                 try { localStorage.setItem("theme", theme); } catch (e) { }
             }
-            redrawCharts();
+        }
+
+        // fades the charts out, redraws them in the new colours, then fades them back in
+        function swapCharts() {
+            const boxes = document.querySelectorAll(".chart-box");
+            boxes.forEach(b => b.classList.add("swapping"));
+            setTimeout(() => {
+                redrawCharts();
+                boxes.forEach(b => b.classList.remove("swapping"));
+            }, 500);
         }
 
         themeBtn.addEventListener("click", () => {
-            const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            const root = document.documentElement;
+            const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+            // the theme-fade class gives everything a slow cross-fade (see style.css)
+            clearTimeout(fadeTimer);
+            root.classList.add("theme-fade");
             applyTheme(next, true);
+            swapCharts();
+            fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 1200);
         });
 
         applyTheme(document.documentElement.getAttribute("data-theme"), false);
 
         /* ---------- fake "importing" animation ---------- */
-        // fast = true is used during the arrival so it finishes inside the 2.5 seconds
+        // fast = true is used during the page-load run so it finishes while the page is still fading in
         async function playImports(out, fast = false) {
             if (importsDone) return;
             importsDone = true;
@@ -489,7 +511,7 @@ for file in os.listdir("Certificates"):
             });
         }
 
-        // arrive = true is the automatic run on page load, timed to match the arrival animation
+        // arrive = true is the automatic run on page load
         async function runAll(arrive = false) {
             if (running) return;
             running = true;
@@ -498,13 +520,13 @@ for file in os.listdir("Certificates"):
             kernelStatus.textContent = "Python 3 | Busy";
             dot.classList.add("busy");
 
-            const cells = document.querySelectorAll(".cell");
-            for (let i = 0; i < cells.length; i++) {
-                if (arrive && !reduceMotion) {
-                    const wait = i * ARRIVE_STEP + 350 - performance.now();
-                    if (wait > 0) await sleep(wait);
-                }
-                await runCell(cells[i], arrive);
+            if (arrive && !reduceMotion) {
+                const wait = ARRIVE_DELAY - performance.now();
+                if (wait > 0) await sleep(wait);
+            }
+
+            for (const cell of document.querySelectorAll(".cell")) {
+                await runCell(cell, arrive);
             }
 
             kernelStatus.textContent = "Python 3 | Idle";
@@ -537,6 +559,29 @@ for file in os.listdir("Certificates"):
             });
         }
 
+        /* ---------- the first cell types itself out after a restart ---------- */
+        function clearTypedCode() {
+            // keep the box at its full height so the page doesn't jump while it is empty
+            typedCode.style.minHeight = typedCode.offsetHeight + "px";
+            typedCode.textContent = "";
+        }
+
+        async function typeCode() {
+            if (reduceMotion) {
+                typedCode.textContent = TYPED_TEXT;
+                typedCode.style.minHeight = "";
+                return;
+            }
+
+            typedCode.classList.add("typing");
+            for (const ch of TYPED_TEXT) {
+                typedCode.textContent += ch;
+                await sleep(ch === "\n" ? 300 : 30 + Math.random() * 40);
+            }
+            typedCode.classList.remove("typing");
+            typedCode.style.minHeight = "";
+        }
+
         function stopGlow() {
             restartBtn.classList.remove("glow");
         }
@@ -547,6 +592,7 @@ for file in os.listdir("Certificates"):
 
         restartBtn.addEventListener("click", async () => {
             if (running) return;
+            running = true;
             stopGlow();
             restartBtn.disabled = true;
             runAllBtn.disabled = true;
@@ -554,14 +600,20 @@ for file in os.listdir("Certificates"):
             dot.classList.add("busy");
 
             resetCells();
+            clearTypedCode();
             window.scrollTo({ top: 0, behavior: "smooth" });
 
             await sleep(700);
 
             kernelStatus.textContent = "Python 3 | Idle";
             dot.classList.remove("busy");
+
+            await typeCode();
+
+            // everything is now waiting for the visitor to run it
             restartBtn.disabled = false;
             runAllBtn.disabled = false;
+            running = false;
         });
 
         runAllBtn.addEventListener("click", () => runAll(false));
@@ -573,7 +625,7 @@ for file in os.listdir("Certificates"):
             });
         });
 
-        /* ---------- on page load: arrival animation + auto run, then make the restart button glow ---------- */
+        /* ---------- on page load: fade in, auto run everything, then make the restart button glow ---------- */
         async function startup() {
             kernelStatus.textContent = "Python 3 | Starting...";
             dot.classList.add("busy");

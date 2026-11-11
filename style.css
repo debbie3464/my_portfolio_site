@@ -48,24 +48,24 @@ body {
     color: var(--text);
     font-family: "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* ---------- arrival animation (2.5s in total) ----------
-   7 cells x 0.3s stagger (last one starts at 1.8s) + 0.7s fade = 2.5s.
-   Each cell has its own --i number in the HTML. */
-@keyframes arrive {
+/* ---------- page load: everything fades in together over 3 seconds ---------- */
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(14px);
     }
 }
 
-@keyframes navArrive {
-    from {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
+/* ---------- slow dark mode transition ----------
+   the script adds .theme-fade to <html> for about a second whenever the theme is switched,
+   so colours cross-fade slowly instead of snapping. It is removed afterwards so it
+   never gets in the way of normal hover effects. */
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+    transition: background-color 1s ease-in-out, color 1s ease-in-out, border-color 1s ease-in-out,
+        box-shadow 1s ease-in-out, opacity 0.5s ease, transform 0.5s ease !important;
 }
 
 /* ---------- navbar (styled like a notebook menu bar) ---------- */
@@ -82,8 +82,6 @@ body {
     background: var(--bg);
     border-bottom: 1px solid var(--border);
     font-size: 14px;
-    animation: navArrive 0.6s ease-out backwards;
-    transition: background 0.3s ease;
 }
 
 .logo {
@@ -188,7 +186,7 @@ body {
     height: 10px;
     border-radius: 50%;
     background: var(--muted);
-    transition: transform 0.25s ease, background 0.25s ease;
+    transition: transform 0.5s ease, background-color 0.5s ease;
 }
 
 [data-theme="dark"] .thumb {
@@ -203,7 +201,7 @@ body {
     padding: 20px 0;
     background: var(--bg);
     box-shadow: 0 0 12px var(--shadow);
-    transition: background 0.3s ease;
+    animation: fadeIn 3s ease-in-out backwards;
 }
 
 section {
@@ -216,8 +214,6 @@ section {
     color: var(--text);
     border-left: 4px solid transparent;
     transition: background 0.25s ease, border-color 0.25s ease;
-    animation: arrive 0.7s ease-out backwards;
-    animation-delay: calc(var(--i, 0) * 0.3s);
 }
 
 .cell:hover {
@@ -251,7 +247,6 @@ code {
     border: 1px solid var(--border);
     border-radius: 2px;
     padding: 10px 90px 10px 12px;
-    transition: background 0.3s ease;
 }
 
 /* multi-line code that keeps its own line breaks and indentation */
@@ -259,6 +254,19 @@ code.pre {
     white-space: pre;
     overflow-x: auto;
     line-height: 1.5;
+}
+
+/* blinking cursor while the first cell types itself out */
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+code.typing::after {
+    content: "▍";
+    margin-left: 1px;
+    animation: blink 1s steps(1) infinite;
 }
 
 /* ---------- per-cell run buttons ---------- */
@@ -303,6 +311,13 @@ code.pre {
     color: var(--accent);
 }
 
+.out-title {
+    margin-bottom: 12px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
 .about-text {
     max-width: 70ch;
 }
@@ -339,6 +354,11 @@ code.pre {
     flex: 1 1 280px;
 }
 
+/* charts fade out and back in while the theme changes */
+.chart-box.swapping {
+    opacity: 0;
+}
+
 /* ---------- certificates ---------- */
 .cert-grid {
     display: grid;
@@ -356,10 +376,14 @@ code.pre {
     height: auto;
     border: 1px solid var(--border);
     border-radius: 2px;
-    transition: border-color 0.2s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
-.cert-grid a:hover img {
+/* small, slow lift on hover (and on keyboard focus) */
+.cert-grid a:hover img,
+.cert-grid a:focus-visible img {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px var(--shadow);
     border-color: var(--accent);
 }
 
@@ -506,6 +530,12 @@ footer {
         animation: none !important;
         transition: none !important;
         scroll-behavior: auto !important;
+    }
+
+    html.theme-fade *,
+    html.theme-fade *::before,
+    html.theme-fade *::after {
+        transition: none !important;
     }
 
     /* no pulse, so show a plain highlighted border instead */
