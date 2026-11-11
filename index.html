@@ -8,14 +8,12 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📓</text></svg>">
 
-    <!-- sets the saved theme before the page paints, so there is no white flash in dark mode -->
+    <!-- sets the saved theme before the page paints, so there is no flash of the wrong colours -->
     <script>
         (function () {
             var theme = null;
             try { theme = localStorage.getItem("theme"); } catch (e) { }
-            if (!theme) {
-                theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-            }
+            if (theme !== "pink") theme = "light";
             document.documentElement.setAttribute("data-theme", theme);
         })();
     </script>
@@ -48,10 +46,13 @@
                     Restart</button>
 
                 <button id="theme-toggle" class="menu-btn" role="switch" aria-checked="false"
-                    aria-label="Toggle dark mode">
+                    aria-label="Switch theme">
                     <span>theme:</span>
+                    <span id="theme-name" class="theme-name">
+                        <span id="tn-word">light</span>
+                        <span class="tn-pink">Pink!</span>
+                    </span>
                     <span class="track"><span class="thumb"></span></span>
-                    <span id="theme-name">light</span>
                 </button>
 
                 <span class="kernel"><span class="dot"></span> <span id="kernel-status">Python 3 | Idle</span></span>
@@ -63,12 +64,14 @@
                 <div class="code">
                     <span class="label">In [ ]:</span>
 <code class="pre" id="typed-code">print("hello world !!")
-print("welcome to my portfolio :D")</code>
+print("welcome to my portfolio :D")
+print("press run on each cell.")</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
                     hello world !!<br>
-                    welcome to my portfolio :D
+                    welcome to my portfolio :D<br>
+                    press run on each cell.
                 </div>
             </div>
 
@@ -96,6 +99,7 @@ print("welcome to my portfolio :D")</code>
                 <div class="code">
                     <span class="label">In [ ]:</span>
                     <code>
+                        print("ABOUT ME")<br>
                         me = Deborah()<br>
                         me.info()<br>
                         me.plot_strengths()
@@ -103,6 +107,7 @@ print("welcome to my portfolio :D")</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
+                    <h3 class="out-title">ABOUT ME</h3>
                     Name: Deborah Lalawmpuii Bhuyan<br>
                     University: Amity University Kolkata<br>
                     Currently studying: B.Tech CSE (AI &amp; Data Science)<br>
@@ -123,7 +128,8 @@ print("welcome to my portfolio :D")</code>
             <div class="cell">
                 <div class="code">
                     <span class="label">In [ ]:</span>
-<code class="pre">print(["Python", "pandas", "SQL", "HTML/CSS", "JavaScript", "Git"])
+<code class="pre">print("SKILLS")
+print(["Python", "pandas", "SQL", "HTML/CSS", "JavaScript", "Git"])
 
 time = {"Data": 50, "Web": 30, "Tools": 20}
 projects = {"Python": 3, "pygame": 2, "pandas": 1, "seaborn": 1}
@@ -135,6 +141,7 @@ plt.show()</code>
                     <button class="run">▶ Run</button>
                 </div>
                 <div class="output hidden">
+                    <h3 class="out-title">SKILLS</h3>
 <pre class="py-out">['Python', 'pandas', 'SQL', 'HTML/CSS', 'JavaScript', 'Git']</pre>
                     <div class="chart-row">
                         <div class="chart-box">
@@ -299,12 +306,14 @@ for file in os.listdir("Certificates"):
         let running = false;
         let importsDone = false;
         let fadeTimer = null;
+        let gagTimers = [];
         const kernelStatus = document.getElementById("kernel-status");
         const dot = document.querySelector(".dot");
         const runAllBtn = document.getElementById("run-all");
         const restartBtn = document.getElementById("restart-btn");
         const themeBtn = document.getElementById("theme-toggle");
-        const themeName = document.getElementById("theme-name");
+        const themeNameBox = document.getElementById("theme-name");
+        const themeWord = document.getElementById("tn-word");
 
         // the first cell's code: it types itself out again after a restart
         const typedCode = document.getElementById("typed-code");
@@ -315,10 +324,9 @@ for file in os.listdir("Certificates"):
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-        const PALETTE = ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b3"];
-
-        // reads a colour from style.css so charts follow light/dark mode
+        // reads a colour from style.css so charts follow the current theme
         const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        const palette = () => [1, 2, 3, 4, 5].map(n => css(`--chart-${n}`));
 
         function setChartDefaults() {
             Chart.defaults.font.family = '"Helvetica Neue", Arial, sans-serif';
@@ -335,7 +343,7 @@ for file in os.listdir("Certificates"):
                     labels: Object.keys(DATA.time),
                     datasets: [{
                         data: Object.values(DATA.time),
-                        backgroundColor: PALETTE,
+                        backgroundColor: palette(),
                         borderColor: css("--bg"),
                         borderWidth: 2
                     }]
@@ -357,7 +365,7 @@ for file in os.listdir("Certificates"):
                     datasets: [{
                         label: "projects",
                         data: Object.values(DATA.projects),
-                        backgroundColor: PALETTE[0]
+                        backgroundColor: palette()[0]
                     }]
                 },
                 options: {
@@ -378,9 +386,9 @@ for file in os.listdir("Certificates"):
                     datasets: [{
                         label: "self-assessed",
                         data: Object.values(DATA.strengths),
-                        backgroundColor: "rgba(76, 114, 176, 0.25)",
-                        borderColor: PALETTE[0],
-                        pointBackgroundColor: PALETTE[0],
+                        backgroundColor: css("--chart-fill"),
+                        borderColor: palette()[0],
+                        pointBackgroundColor: palette()[0],
                         borderWidth: 2
                     }]
                 },
@@ -420,11 +428,40 @@ for file in os.listdir("Certificates"):
             }
         }
 
-        /* ---------- dark mode ---------- */
-        function applyTheme(theme, save) {
+        /* ---------- theme switch: light <-> pink (with the "dark? no, Pink!" joke) ---------- */
+        function clearGag() {
+            gagTimers.forEach(clearTimeout);
+            gagTimers = [];
+        }
+
+        // shows the label straight away with no joke: used on page load and when going back to light
+        function setThemeLabel(theme) {
+            clearGag();
+            themeNameBox.classList.remove("struck", "reveal");
+            if (theme === "pink") {
+                themeWord.textContent = "dark";
+                themeNameBox.classList.add("struck", "reveal");
+            } else {
+                themeWord.textContent = "light";
+            }
+        }
+
+        // the joke: the label says "dark", the word gets crossed out, then "Pink!" pops in
+        function playPinkGag() {
+            clearGag();
+            themeNameBox.classList.remove("struck", "reveal");
+            themeWord.textContent = "dark";
+            gagTimers.push(setTimeout(() => themeNameBox.classList.add("struck"), 400));
+            gagTimers.push(setTimeout(() => themeNameBox.classList.add("reveal"), 950));
+        }
+
+        function applyTheme(theme, save, gag) {
             document.documentElement.setAttribute("data-theme", theme);
-            themeBtn.setAttribute("aria-checked", theme === "dark");
-            themeName.textContent = theme;
+            themeBtn.setAttribute("aria-checked", theme === "pink");
+
+            if (gag && theme === "pink" && !reduceMotion) playPinkGag();
+            else setThemeLabel(theme);
+
             if (save) {
                 try { localStorage.setItem("theme", theme); } catch (e) { }
             }
@@ -442,17 +479,17 @@ for file in os.listdir("Certificates"):
 
         themeBtn.addEventListener("click", () => {
             const root = document.documentElement;
-            const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            const next = root.getAttribute("data-theme") === "pink" ? "light" : "pink";
 
             // the theme-fade class gives everything a slow cross-fade (see style.css)
             clearTimeout(fadeTimer);
             root.classList.add("theme-fade");
-            applyTheme(next, true);
+            applyTheme(next, true, true);
             swapCharts();
             fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 1200);
         });
 
-        applyTheme(document.documentElement.getAttribute("data-theme"), false);
+        applyTheme(document.documentElement.getAttribute("data-theme"), false, false);
 
         /* ---------- fake "importing" animation ---------- */
         // fast = true is used during the page-load run so it finishes while the page is still fading in
@@ -576,7 +613,7 @@ for file in os.listdir("Certificates"):
             typedCode.classList.add("typing");
             for (const ch of TYPED_TEXT) {
                 typedCode.textContent += ch;
-                await sleep(ch === "\n" ? 300 : 30 + Math.random() * 40);
+                await sleep(ch === "\n" ? 150 : 12 + Math.random() * 18);
             }
             typedCode.classList.remove("typing");
             typedCode.style.minHeight = "";
