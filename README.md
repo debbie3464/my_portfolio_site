@@ -1,16 +1,22 @@
-# 📓 Jupyter Notebook-Inspired Portfolio
+# Personal Portfolio Website
 
-A personal portfolio site designed to look and feel like a Jupyter Notebook. Each section is a notebook cell with Python-style syntax, inspired by pandas, seaborn and matplotlib.
+A personal portfolio website designed and developed from scratch using **HTML, CSS, JavaScript, and Chart.js**.
 
+The website features a unique **Jupyter Notebook-inspired interface**, where each notebook cell represents a different section of my portfolio, presenting my projects, technical skills, experience, and other details in an interactive and organized format.
 
-## Features
+### Features
+- Jupyter Notebook-inspired UI and layout.
+- Fully responsive design, optimized for desktop and mobile devices.
+- Interactive data visualizations using Chart.js.
+- Custom-designed interface built from scratch.
+- Deployed and hosted on Vercel.
 
-- Notebook-style cells with `In [ ]:` labels
-- Run buttons that reveal the output, like executing a cell
-- Python-syntax content such as `about_me()`
-
-## Tech Stack
-
-- HTML
-- CSS
+### Tech Stack
+- HTML5
+- CSS3
 - JavaScript
+- Chart.js
+- Vercel (Deployment)
+
+### Live Demo
+[View Portfolio](YOUR_VERCEL_LINK)
