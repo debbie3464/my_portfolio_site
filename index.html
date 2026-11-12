@@ -143,7 +143,8 @@ print("press run on each cell.")</code>
 print(["Python", "pandas", "SQL", "HTML/CSS", "JavaScript", "Git"])
 
 time = {"Data": 50, "Web": 30, "Tools": 20}
-projects = {"Python": 3, "pygame": 2, "pandas": 1, "seaborn": 1}
+projects = {"Python": 3, "JavaScript": 1, "HTML": 1, "CSS": 1,
+            "pygame": 1, "pandas": 1, "seaborn": 1}
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
 ax1.pie(time.values(), labels=time.keys())
@@ -175,7 +176,7 @@ plt.show()</code>
                         <br>
                         projects_df = pd.DataFrame({<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;"project": ["Spotify Analysis", "Pygame Projects", "Expense Tracker", "LeetCode Solutions"],<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;"tech": ["Python, pandas, seaborn", "Python, pygame", "add tech here", "DSA"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"tech": ["Python, pandas, seaborn", "Python, pygame", "JavaScript, HTML, CSS, Python", "DSA"],<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;"description": ["Analysis of my own Spotify listening data", "Games built with pygame, including Snake and When It Rains", "Tracks daily and monthly spending against a limit", "Daily LeetCode problem solutions"],<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;"link": ["GitHub", "GitHub", "GitHub", "GitHub"]<br>
                         })<br>
@@ -216,9 +217,9 @@ plt.show()</code>
                                 <tr>
                                     <th>2</th>
                                     <td>Expense Tracker</td>
-                                    <td>add tech here</td>
+                                    <td>JavaScript, HTML, CSS, Python</td>
                                     <td>Tracks daily and monthly spending against a limit</td>
-                                    <td><a href="https://github.com/debbie3464?tab=repositories" target="_blank"
+                                    <td><a href="https://github.com/debbie3464/Expense-Tracker" target="_blank"
                                             rel="noopener">GitHub</a></td>
                                 </tr>
                                 <tr>
@@ -306,8 +307,8 @@ for file in os.listdir("Certificates"):
             // pie: rough share of your coding time (should add up to 100)
             time: { Data: 50, Web: 30, Tools: 20 },
 
-            // bar: how many projects use each technology
-            projects: { Python: 3, pygame: 2, pandas: 1, seaborn: 1 },
+            // bar: how many projects use each technology (matches the projects table)
+            projects: { Python: 3, JavaScript: 1, HTML: 1, CSS: 1, pygame: 1, pandas: 1, seaborn: 1 },
 
             // radar: how you work, out of 10 (self-assessed)
             strengths: {
@@ -403,7 +404,7 @@ for file in os.listdir("Certificates"):
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
-                        title: { display: true, text: "Where my coding time goes (rough estimate)" },
+                        ttitle: { display: true, text: ["Where my coding time goes", "(rough estimate)"] },
                         legend: { position: "bottom" },
                         tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
                     }
@@ -452,6 +453,7 @@ for file in os.listdir("Certificates"):
                     },
                     scales: {
                         r: {
+                            pointLabels: { callback: label => window.innerWidth < 700 ? label.split(" ") : label },
                             min: 0,
                             max: 10,
                             ticks: { stepSize: 2, backdropColor: "transparent" }
@@ -590,7 +592,6 @@ for file in os.listdir("Certificates"):
                         if (fast) playImports(out, true);   // let it play in the background
                         else await playImports(out);
                     }
-
                     if (!fast) {
                         kernelStatus.textContent = "Python 3 | Idle";
                         dot.classList.remove("busy");

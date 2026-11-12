@@ -59,6 +59,7 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 70px;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -463,7 +464,7 @@ code.typing::after {
 /* ---------- certificates ---------- */
 .cert-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
     gap: 16px;
 }
 
@@ -488,3 +489,311 @@ code.typing::after {
 }
 
 /* ---------- dataframe table: sans-serif, like pandas in Jupyter ---------- */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.df {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.df th,
+.df td {
+    padding: 8px 14px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.df thead th {
+    border-bottom: 1px solid var(--output-text);
+}
+
+/* index column: bold, right-aligned, with a gap before the project name */
+.df tbody th {
+    width: 1%;
+    padding-right: 20px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.df td:nth-child(2),
+.df td:last-child {
+    white-space: nowrap;   /* project names and links stay on one line */
+}
+
+.df td:nth-child(3) { min-width: 170px; }
+.df td:nth-child(4) { min-width: 220px; }
+
+.df tbody tr {
+    transition: background 0.2s ease;
+}
+
+.df tbody tr:nth-child(odd) {
+    background: var(--stripe);
+}
+
+.df tbody tr:hover {
+    background: var(--row-hover);
+}
+
+.df-caption {
+    margin-top: 8px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* ---------- contact ---------- */
+.contact-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 28px;
+}
+
+.contact-list dt {
+    color: var(--muted);
+}
+
+.contact-list dd {
+    overflow-wrap: anywhere;
+}
+
+.contact-list a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.contact-list a:hover {
+    text-decoration-thickness: 2px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    color: var(--muted);
+}
+
+/* ---------- phones ---------- */
+@media (max-width: 700px) {
+    html {
+        scroll-padding-top: 10px;
+    }
+
+    /* full-width page: no outer margin or shadow */
+    .notebook {
+        margin: 0;
+        padding: 0 0 10px;
+        box-shadow: none;
+    }
+
+    /* navbar: stacked rows, and not sticky so it doesn't cover the screen */
+    .navbar {
+        position: static;
+        padding: 12px 14px;
+        gap: 10px;
+    }
+
+    .logo {
+        flex-basis: 100%;
+    }
+
+    .navbar ul {
+        order: 2;
+        flex-basis: 100%;
+        gap: 18px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .navbar ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .navbar li {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .navbar ul a {
+        display: block;
+        padding: 6px 0;
+    }
+
+    .menu-actions {
+        order: 3;
+        flex-basis: 100%;
+        gap: 6px;
+    }
+
+    .menu-btn {
+        padding: 8px 12px;
+        border-color: var(--border);
+    }
+
+    .kernel {
+        flex-basis: 100%;
+        margin-left: 0;
+        font-size: 13px;
+    }
+
+    #loader-text {
+        font-size: 16px;
+    }
+
+    section {
+        padding: 6px 12px;
+    }
+
+    .cell {
+        margin: 14px 0;
+        border-left-width: 3px;
+    }
+
+    /* code: label and run button on one row, code box full width underneath */
+    .code {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .label {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        min-height: 34px;
+        padding-top: 0;
+        text-align: left;
+    }
+
+    code {
+        padding: 10px 12px;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+    }
+
+    .run {
+        top: 0;
+        right: 0;
+        padding: 8px 14px;
+        line-height: 1;
+    }
+
+    /* output */
+    .output {
+        padding: 10px 0 12px;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+    }
+
+    .out-label {
+        position: static;
+        display: block;
+        width: auto;
+        margin-bottom: 4px;
+        text-align: left;
+    }
+
+    /* charts */
+    .chart-box {
+        height: 280px;
+        margin-top: 14px;
+    }
+
+    .chart-box.tall {
+        height: 340px;
+    }
+
+    .chart-row {
+        gap: 12px;
+    }
+
+    /* table scrolls sideways inside its own box */
+    .df {
+        min-width: 640px;
+    }
+
+    .df th,
+    .df td {
+        padding: 6px 10px;
+    }
+
+    .cert-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-list {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    .contact-list dd {
+        margin-bottom: 10px;
+    }
+
+    .contact-list a {
+        display: inline-block;
+        padding: 4px 0;
+    }
+}
+
+@media (max-width: 380px) {
+    .navbar ul {
+        gap: 14px;
+    }
+
+    .menu-btn {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    #loader-text {
+        font-size: 14px;
+    }
+}
+
+/* touch screens: no hover effects that stay stuck after a tap */
+@media (hover: none) {
+    .cell:hover {
+        border-left-color: transparent;
+        background: none;
+    }
+
+    .cert-grid a:hover img {
+        transform: none;
+        box-shadow: none;
+        border-color: var(--border);
+    }
+
+    .df tbody tr:hover {
+        background: transparent;
+    }
+
+    .df tbody tr:nth-child(odd):hover {
+        background: var(--stripe);
+    }
+}
+
+/* ---------- respect people who turn animations off ---------- */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after,
+    html.theme-fade *,
+    html.theme-fade *::before,
+    html.theme-fade *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* no pulse, so show a plain highlighted border instead */
+    .menu-btn.glow {
+        border-color: var(--accent);
+    }
+}
